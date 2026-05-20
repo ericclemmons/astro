@@ -1,0 +1,6 @@
+---
+// This component intentionally throws a ReferenceError by calling
+// an undefined function, simulating a missing import.
+const result = undefinedFunction();
+---
+<div>{result}</div>

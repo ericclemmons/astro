@@ -33,6 +33,12 @@ declare global {
 type CfResponse = Awaited<ReturnType<Required<ExportedHandler<Env>>['fetch']>>;
 
 const app = createApp();
+// Prerender requests use a non-streaming app so that rendering errors are thrown
+// synchronously during app.render() instead of being lost in the ReadableStream.
+// With streaming enabled, errors during component rendering fire via setTimeout
+// after partial HTML has already been sent, causing workerd to log an "Uncaught
+// exception" while the HTTP response silently returns truncated 200 content.
+const prerenderApp = isPrerender ? createApp({ streaming: false }) : undefined;
 
 export async function handle(
 	request: Request,
@@ -40,17 +46,17 @@ export async function handle(
 	context: ExecutionContext,
 ): Promise<CfResponse> {
 	// Handle prerender endpoints (only active during build prerender phase)
-	if (isPrerender) {
+	if (isPrerender && prerenderApp) {
 		if (compileImageConfig) {
 			const { installAddStaticImage } = await import('./static-image-collection.js');
 			installAddStaticImage(compileImageConfig);
 		}
 
 		if (isStaticPathsRequest(request)) {
-			return handleStaticPathsRequest(app) as unknown as CfResponse;
+			return handleStaticPathsRequest(prerenderApp) as unknown as CfResponse;
 		}
 		if (isPrerenderRequest(request)) {
-			return handlePrerenderRequest(app, request) as unknown as CfResponse;
+			return handlePrerenderRequest(prerenderApp, request) as unknown as CfResponse;
 		}
 		if (isStaticImagesRequest(request)) {
 			return handleStaticImagesRequest() as unknown as CfResponse;
