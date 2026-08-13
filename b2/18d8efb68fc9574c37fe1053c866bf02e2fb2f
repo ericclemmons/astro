@@ -1,0 +1,23 @@
+packages/astro/test/fixtures/incremental-build/src/components/Shared.astro
+  s_2a4bb12125a1c9::t_0f059091226876 1
+packages/astro/test/fixtures/incremental-build/src/content/docs/a.mdx
+  s_2a4bb12125a1c9::t_c5404e086b32a5 5-8
+pnpm-lock.yaml
+  s_2a4bb12125a1c9::t_4f3d4f32a30e0e 3509-3511
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b218d8efb68fc9574c37fe1053c866bf02e2fb2f",
+  "prompts": {},
+  "sessions": {
+    "s_2a4bb12125a1c9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ffbd2-70ef-7480-9280-9916f98dfac0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Eric Clemmons <eclemmons@cloudflare.com>"
+    }
+  }
+}
